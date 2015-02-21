@@ -4,13 +4,19 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
+import com.csappat.pre.biometrickeyboardid.views.SensorKey;
+
 
 public class PasswordActivity extends ActionBarActivity {
+
+    SensorKey key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
+        key= (SensorKey) findViewById(R.id.key);
+        key.setKey("V");
     }
 
     @Override
