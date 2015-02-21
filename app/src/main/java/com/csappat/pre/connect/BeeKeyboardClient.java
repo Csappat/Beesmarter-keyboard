@@ -27,6 +27,7 @@ public class BeeKeyboardClient {
 
     public String GetPassword() {
         //TODO: jelszólekérés
+        password = "adesxq";
         return password;
     }
 
