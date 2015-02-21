@@ -12,7 +12,7 @@ import java.net.Socket;
 public class BeeKeyboardClient {
     private static String IP_ADDRESS = "192.168.0.105";
     private static int IP_PORT = 9999;
-    private static String TEAM_ID = "TEST1";
+    private static String TEAM_ID = "TEST1"; //TODO: változtatni az éles verzióhoz
     private Socket client;
     private BufferedReader read;
     private BufferedWriter output;
