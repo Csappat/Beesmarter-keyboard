@@ -29,18 +29,21 @@ public class XMLParser {
                     int relposx = Integer.parseInt(xpp.getAttributeValue(null, "relative-pos-x").replace("%", ""));
                     int relposy = Integer.parseInt(xpp.getAttributeValue(null, "relative-pos-y").replace("%", ""));
 
+                    /*try {
+                        xpp.getAttributeValue(null, "code").charAt(0);
+                    }*/
 
                     if (xpp.getName().equals("key-down")) {
                         PatternModel model = new PatternModel(Type.KeyDown,
                                 Integer.parseInt(xpp.getAttributeValue(null, "posix-time")),
-                                xpp.getAttributeValue(null, "code").charAt(0),
+                                xpp.getAttributeValue(null, "code"),
                                 relposx,
                                 relposy);
                         models.add(model);
                     } else {
                         PatternModel model = new PatternModel(Type.KeyRelease,
                                 Integer.parseInt(xpp.getAttributeValue(null, "posix-time")),
-                                xpp.getAttributeValue(null, "code").charAt(0),
+                                xpp.getAttributeValue(null, "code"),
                                 relposx,
                                 relposy);
                         models.add(model);

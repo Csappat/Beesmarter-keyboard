@@ -6,11 +6,11 @@ package com.csappat.pre.biometrickeyboardid.xml;
 public class PatternModel {
     public final Type type; //
     public final int time; //millisec
-    public final char charCode; //charachter code
+    public final String charCode; //charachter code
     public final int relposx; // %
     public final int relposy; // %
 
-    public PatternModel(Type type, int time, char charCode, int relposx, int relposy) {
+    public PatternModel(Type type, int time, String charCode, int relposx, int relposy) {
         this.type = type;
         this.time = time;
         this.charCode = charCode;
