@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.csappat.pre.biometrickeyboardid.R;
@@ -12,10 +14,13 @@ import com.csappat.pre.biometrickeyboardid.R;
 /**
  * TODO: document your custom view class.
  */
-public class SensorKey extends View implements View.OnClickListener {
+public class SensorKey extends View  {
 
     private String key;
     private Drawable keyBackground;
+    private Paint paint;
+    private OnClickListener listener;
+    private boolean active = false;
 
     public String getKey() {
         return key;
@@ -35,14 +40,34 @@ public class SensorKey extends View implements View.OnClickListener {
 
     public SensorKey(Context context) {
         super(context);
-        setKeyBackground(getResources().getDrawable(R.drawable.key_background));
-       // setKey("VIKI");
+        setKeyBackground(getResources().getDrawable(R.drawable.key_background_inactive));
     }
 
     public SensorKey(Context context, AttributeSet attrs) {
         super(context, attrs);
         requestFocus();
-        setKeyBackground(getResources().getDrawable(R.drawable.key_background));
+        setKeyBackground(getResources().getDrawable(R.drawable.key_background_inactive));
+        paint= new Paint();
+        paint.setColor(getResources().getColor(R.color.white));
+        this.setFocusable(true);
+        this.setClickable(true);
+    }
+
+    private void changeState(){
+        if (active){
+            setKeyBackground(getResources().getDrawable(R.drawable.key_background_inactive));
+            paint.setColor(getResources().getColor(R.color.white));
+            invalidate();
+            active=!active;
+
+        }
+        else{
+            setKeyBackground(getResources().getDrawable(R.drawable.key_background_active));
+            paint.setColor(getResources().getColor(R.color.gray));
+            invalidate();
+            active=!active;
+
+        }
     }
 
     @Override
@@ -54,10 +79,8 @@ public class SensorKey extends View implements View.OnClickListener {
         keyBackground.draw(canvas);
 
         //Key
-        Paint paint= new Paint();
-        paint.setColor(getResources().getColor(R.color.gray));
-        paint.setStrokeWidth(4);
-        paint.setTextSize(this.getHeight()-5);
+        paint.setStrokeWidth(2);
+        paint.setTextSize(this.getHeight()/2);
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.CENTER);
         int xPos = (canvas.getWidth() / 2);
@@ -65,8 +88,31 @@ public class SensorKey extends View implements View.OnClickListener {
         canvas.drawText(key,xPos,yPos,paint);
     }
 
-    @Override
-    public void onClick(View v) {
+    //Click
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if(listener != null) listener.onClick(this);
+            changeState();
+        }
+        if(event.getAction() == MotionEvent.ACTION_UP) {
+            if(listener != null) listener.onClick(this);
+            changeState();
+        }
+        return super.dispatchTouchEvent(event);
     }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if(event.getAction() == KeyEvent.ACTION_UP && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER || event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+            if(listener != null) listener.onClick(this);
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    public void setOnClickListener(OnClickListener listener) {
+        this.listener = listener;
+    }
+
 }
