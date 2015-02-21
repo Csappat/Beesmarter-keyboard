@@ -1,17 +1,45 @@
 package com.csappat.pre.biometrickeyboardid;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    Button trainingBtn;
+    Button passwordBtn;
+    EditText ipTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        trainingBtn = (Button) findViewById(R.id.training);
+        passwordBtn = (Button) findViewById(R.id.password);
+        ipTxt = (EditText) findViewById(R.id.ip);
+
+        trainingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setClass(getApplicationContext(),TrainingActivity.class);
+                startActivity(i);
+            }
+        });
+        passwordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setClass(getApplicationContext(),PasswordActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
 
