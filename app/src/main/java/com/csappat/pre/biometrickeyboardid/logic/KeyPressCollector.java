@@ -1,6 +1,7 @@
 package com.csappat.pre.biometrickeyboardid.logic;
 
 import com.csappat.pre.biometrickeyboardid.xml.PatternModel;
+import com.csappat.pre.biometrickeyboardid.xml.Type;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,9 @@ public class KeyPressCollector {
 
         loop:
         for (PatternModel m : models) {
+            if (m.type != Type.KeyRelease) {
+                continue;
+            }
             switch(m.charCode) {
                 case XMLConstants.BACKSPACE:
                     builder.deleteCharAt(builder.length() - 1);
