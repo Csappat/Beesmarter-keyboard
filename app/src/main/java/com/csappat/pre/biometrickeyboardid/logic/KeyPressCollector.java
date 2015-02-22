@@ -30,6 +30,10 @@ public class KeyPressCollector {
         models.add(m);
     }
 
+    public ArrayList<PatternModel> getModels() {
+        return models;
+    }
+
     public String getCurrentString() {
         boolean isUpperCase = this.isUpperCase;
         StringBuilder builder = new StringBuilder();
