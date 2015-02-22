@@ -10,6 +10,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.csappat.pre.biometrickeyboardid.R;
+import com.csappat.pre.biometrickeyboardid.xml.PatternModel;
+import com.csappat.pre.biometrickeyboardid.xml.Type;
+
+import java.util.Calendar;
 
 /**
  * TODO: document your custom view class.
@@ -58,6 +62,7 @@ public class SensorKey extends View  {
     public void changeUpperOrLowerCase(){
         if(isUpperCase) key.toLowerCase();
         else key.toUpperCase();
+        isUpperCase=!isUpperCase;
         invalidate();
     }
 
@@ -102,13 +107,47 @@ public class SensorKey extends View  {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        Type type;
+        String charCode=key;
+        long millisDown=0;
+        long millisRelease=0;
+
+
+        switch (charCode){
+            case "←" : {
+                charCode= "BACKSPACE";
+                break;
+            }
+            case "↵" : {
+                charCode= "ENTER";
+                break;
+            }
+            case "⇧" : {
+                charCode= "SHIFT";
+                changeUpperOrLowerCase();
+                break;
+            }
+            case " " : {
+                charCode= "SPACE";
+                break;
+            }
+
+        }
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             if(listener != null) listener.onClick(this);
             changeState();
+            type= Type.KeyDown;
+            millisDown=  Calendar.getInstance().getTimeInMillis();
+
+
         }
         if(event.getAction() == MotionEvent.ACTION_UP) {
             if(listener != null) listener.onClick(this);
             changeState();
+            type= Type.KeyRelease;
+            millisRelease=Calendar.getInstance().getTimeInMillis();
+            PatternModel reseaseModel= new PatternModel(type,(int)(millisRelease-millisDown),charCode,
+                    (int)((event.getX()/this.getWidth())*100),(int)((event.getY()/this.getHeight()*100)));
         }
         return super.dispatchTouchEvent(event);
     }
