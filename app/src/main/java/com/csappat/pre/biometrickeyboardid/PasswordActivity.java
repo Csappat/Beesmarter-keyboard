@@ -169,7 +169,7 @@ public class PasswordActivity extends ActionBarActivity {
         if (trainingCount > 2 && trial == false) {
             trainingCount = 0;
             trial = true;
-            trainingButton.setText("Start trial");
+            trainingButton.setText("Send");
             return;
         }
         if (trial == true)  {
