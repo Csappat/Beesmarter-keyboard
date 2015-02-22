@@ -25,6 +25,9 @@
             android:name=".PasswordActivity"
             android:label="@string/title_activity_password" >
         </activity>
+        <activity
+            android:name=".ServerTest"
+            android:label="@string/title_activity_servertest"></activity>
     </application>
 
 </manifest>

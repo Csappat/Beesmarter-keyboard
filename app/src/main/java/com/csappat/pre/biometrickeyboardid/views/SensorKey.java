@@ -39,8 +39,8 @@ public class SensorKey extends View  {
     private static List<SensorKey> keys = new ArrayList<SensorKey>();
     private static TextView editedView;
 
-    private static long lastKeyUp  = 0;
-    long millisDown=0;
+    public static long lastKeyUp  = 0;
+    public static long millisDown = 0;
 
     public String getKey() {
         return key;

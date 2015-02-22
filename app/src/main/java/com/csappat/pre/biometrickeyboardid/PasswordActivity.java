@@ -2,9 +2,15 @@ package com.csappat.pre.biometrickeyboardid;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.csappat.pre.biometrickeyboardid.logic.KeyPressCollector;
+import com.csappat.pre.biometrickeyboardid.logic.PasswordGestureCollector;
 import com.csappat.pre.biometrickeyboardid.views.SensorKey;
+import com.csappat.pre.biometrickeyboardid.xml.PatternModel;
 
 import java.util.ArrayList;
 
@@ -12,6 +18,9 @@ import java.util.ArrayList;
 public class PasswordActivity extends ActionBarActivity {
 
     private ArrayList<SensorKey> keys;
+
+    boolean isTraining = false;
+    private int trainingCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,9 +158,34 @@ public class PasswordActivity extends ActionBarActivity {
         keys.add(space);
 
         SensorKey.setViewGroupAndEditedView(keys, (TextView)findViewById(R.id.editable) );
-
-
     }
 
+
+    public void startTraining(View v) {
+        Button trainingButton = (Button)v;
+        if (!isTraining) {
+            isTraining = true;
+            trainingButton.setText("Next pattern");
+            PasswordGestureCollector.resetKeyBoardTrainingGestures();
+            trainingCount = 0;
+            SensorKey.millisDown = 0;
+            SensorKey.lastKeyUp = 0;
+        } else {
+            KeyPressCollector col = new KeyPressCollector(false);
+            for (PatternModel p : KeyPressCollector.getDefaultCollector().getModels()) {
+                col.keyPressed(p);
+            }
+            KeyPressCollector.resetDefaultCollector();
+            PasswordGestureCollector.addGestureFromKeyboard(col);
+            trainingCount++;
+            if (trainingCount > 2) {
+                trainingCount = 0;
+                isTraining = false;
+                Log.d("PasswordActivity", "Gestures " + PasswordGestureCollector.getGesturesFromKeyboardTraining().toString());
+                PasswordGestureCollector.getGesturesFromKeyboardTraining().finishTraining();
+                trainingButton.setText("Start training");
+            }
+        }
+    }
 
 }
