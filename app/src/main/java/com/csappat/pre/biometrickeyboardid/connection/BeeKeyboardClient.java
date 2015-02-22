@@ -32,40 +32,8 @@ public class BeeKeyboardClient {
         conctTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void ConnectionReady() {
-        sendMessage(TEAM_ID);
-        ready = true;
-    }
-
-    public String GetPassword() {
-        if (!ready) return null;
-        sendMessage("RQSTDATA");
-        password = msgResponse;
-        return password;
-    }
-
-    public String getTraining() {
-        if (!ready) return null;
-        sendMessage("RQSTTRAIN");
-        trainer = msgResponse;
-        return trainer;
-    }
-
-    public String getTest() {
-        if (!ready) return null;
-        sendMessage("RQSTTEST");
-        probe = msgResponse;
-        return probe;
-    }
-
-    public String setResult(boolean auth) {
-        if (!ready) return null;
-        sendMessage((auth) ? "ACCEPT" : "REJECT");
-        if (msgResponse.startsWith("GOODBYE")) {
-            ready = false;
-            this.Destroy();
-            return null;
-        } else return msgResponse;
+    public void Auth(boolean isItYou) {
+        sendMessage((isItYou) ? "ACCEPT" : "REJECT");
     }
 
     private void sendMessage(String message) {
@@ -118,6 +86,7 @@ public class BeeKeyboardClient {
             String tmpMsg = values[0];
             if (tmpMsg.endsWith("WAITING FOR REQUEST")) tmpMsg = "WAITING";
             if (tmpMsg.startsWith("PASSWORD")) tmpMsg = "PASS";
+            if (tmpMsg.startsWith("GOODBYE")) tmpMsg = "BYE";
             switch (tmpMsg) {
                 case "BSP 1.0 SERVER HELLO":
                     sendMessage("BSP 1.0 CLIENT HELLO");
@@ -132,6 +101,9 @@ public class BeeKeyboardClient {
                     delegate.msgIn("PASS", values[0].substring(9));
                     status = "RQSTTRAIN";
                     sendMessage(status);
+                    break;
+                case "bye":
+                    delegate.msgIn("BYE", "");
                     break;
                 default:
                     if (status == "RQSTTRAIN") {
