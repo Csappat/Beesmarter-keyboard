@@ -31,6 +31,7 @@ public class ServerTest extends Activity implements AsyncResponse {
         list = (ListView) findViewById(R.id.listView);
         msgList = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         list.setAdapter(msgList);
+        Log.d("OK", "Eddig jó");
         myClient = new BeeKeyboardClient(getIntent().getExtras().getString("ip"));
         myClient.conctTask.delegate = this;
         Log.d("ConnectionActivity", "Konstruktor vége");
