@@ -26,6 +26,9 @@ public class BeeKeyboardClient {
         mTcpClient = null;
         // connect to the server
         conctTask = new connectTask();
+    }
+
+    public void Start() {
         conctTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -128,12 +131,13 @@ public class BeeKeyboardClient {
                 case "PASS":
                     delegate.msgIn("PASS", values[0].substring(9));
                     status = "RQSTTRAIN";
-                    sendMessage("RQSTTRAIN");
+                    sendMessage(status);
                     break;
                 default:
                     if (status == "RQSTTRAIN") {
                         delegate.msgIn("TRAIN", values[0]);
                         status = "RQSTTEST";
+                        sendMessage(status);
                         break;
                     }
                     if (status == "RQSTTEST") {
