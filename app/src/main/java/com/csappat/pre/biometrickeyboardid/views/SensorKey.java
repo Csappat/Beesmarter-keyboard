@@ -21,6 +21,7 @@ public class SensorKey extends View  {
     private Paint paint;
     private OnClickListener listener;
     private boolean active = false;
+    private static boolean isUpperCase = false;
 
     public String getKey() {
         return key;
@@ -51,6 +52,13 @@ public class SensorKey extends View  {
         paint.setColor(getResources().getColor(R.color.white));
         this.setFocusable(true);
         this.setClickable(true);
+
+    }
+
+    public void changeUpperOrLowerCase(){
+        if(isUpperCase) key.toLowerCase();
+        else key.toUpperCase();
+        invalidate();
     }
 
     private void changeState(){
@@ -80,12 +88,14 @@ public class SensorKey extends View  {
 
         //Key
         paint.setStrokeWidth(2);
-        paint.setTextSize(this.getHeight()/2);
+        paint.setTextSize(this.getHeight()/3);
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.CENTER);
         int xPos = (canvas.getWidth() / 2);
         int yPos = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
-        canvas.drawText(key,xPos,yPos,paint);
+        try {
+            canvas.drawText(key, xPos, yPos, paint);
+        }catch(NullPointerException e ){};
     }
 
     //Click
