@@ -13,14 +13,27 @@ public class PasswordGestureCollector {
     private ArrayList<KeyPressCollector> gestures = new ArrayList<KeyPressCollector>();
     private GestureStatistics stat = null;
 
+    private static PasswordGestureCollector trainingFromKeyboard = new PasswordGestureCollector();
 
+    public static void addGestureFromKeyboard(KeyPressCollector c) {
+        trainingFromKeyboard.add(c);
+    }
+    public static PasswordGestureCollector getGesturesFromKeyboardTraining() {
+        return trainingFromKeyboard;
+    }
+    public static void resetKeyBoardTrainingGestures() {
+        trainingFromKeyboard = new PasswordGestureCollector();
+    }
     //max 4 sec
     public boolean isItYou(KeyPressCollector current) {
         PasswordGestureCollector col = new PasswordGestureCollector();
         col.add(current);
         col.finishTraining();
         boolean result = true;
-        if (gestures != null) {
+        if (gestures.size()  != 0 && stat != null) {
+            if (!current.getCurrentString().equals(gestures.get(0).getCurrentString())) {
+                return false;
+            }
             if (Math.abs((col.stat.deviationTouchAccuracyX - stat.deviationTouchAccuracyX) / stat.deviationTouchAccuracyX) > 0.3 ) {
                 return false;
             }
