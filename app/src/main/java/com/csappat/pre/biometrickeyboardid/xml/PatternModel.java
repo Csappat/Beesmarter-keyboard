@@ -12,7 +12,7 @@ public class PatternModel {
 
     public PatternModel(Type type, int time, String charCode, int relposx, int relposy) {
         this.type = type;
-        this.time = time;
+        this.time = time; //az előző ierakció óta eltelt idő
         this.charCode = charCode;
         this.relposx = relposx;
         this.relposy = relposy;

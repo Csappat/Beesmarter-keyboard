@@ -9,8 +9,18 @@ import java.util.ArrayList;
  * Created by Patrik on 2015.02.21..
  */
 public class KeyPressCollector {
-    ArrayList<PatternModel> models = new ArrayList<PatternModel>();
+    private ArrayList<PatternModel> models = new ArrayList<PatternModel>();
     private boolean isUpperCase = false;
+
+    private static KeyPressCollector collector = new KeyPressCollector(false);
+
+    public static KeyPressCollector getDefaultCollector() {
+        return collector;
+    }
+
+    public static void resetDefaultCollector() {
+        collector.models.clear();
+    }
 
     public KeyPressCollector(boolean isUpperCaseForInitial) {
         isUpperCase = isUpperCaseForInitial;
@@ -52,7 +62,7 @@ public class KeyPressCollector {
             }
 
         }
-        return models.toString();
+        return builder.toString();
     }
 
 }
