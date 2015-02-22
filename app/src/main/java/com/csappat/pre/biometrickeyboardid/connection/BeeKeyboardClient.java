@@ -21,10 +21,8 @@ public class BeeKeyboardClient {
     private ArrayList<String> arrayList;
     private String password, trainer, probe;
 
-    public BeeKeyboardClient(String ip) {
+    public BeeKeyboardClient() {
         Log.d("BeeKeyboardClient", "Konstruktor meghívva, csatlakozás, handshake.");
-        mTcpClient = null;
-        mTcpClient.SERVERIP = ip;
         conctTask = new connectTask();
     }
 

@@ -1,6 +1,7 @@
 package com.csappat.pre.biometrickeyboardid;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 
 import com.csappat.pre.biometrickeyboardid.connection.AsyncResponse;
 import com.csappat.pre.biometrickeyboardid.connection.BeeKeyboardClient;
+import com.csappat.pre.biometrickeyboardid.connection.TCPClient;
 import com.csappat.pre.biometrickeyboardid.logic.KeyPressCollector;
 import com.csappat.pre.biometrickeyboardid.logic.PasswordGestureCollector;
 import com.csappat.pre.biometrickeyboardid.xml.PatternModel;
@@ -31,16 +33,19 @@ public class ServerTest extends Activity implements AsyncResponse {
         list = (ListView) findViewById(R.id.listView);
         msgList = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         list.setAdapter(msgList);
-        Log.d("OK", "Eddig jó");
-        myClient = new BeeKeyboardClient(getIntent().getExtras().getString("ip"));
-        myClient.conctTask.delegate = this;
         Log.d("ConnectionActivity", "Konstruktor vége");
 
     }
 
     public void clickTest(View view) {
-        myClient.Start();
+        Intent intent = getIntent();
+        TCPClient.SERVERIP = intent.getStringExtra("ip");
+
+        myClient = new BeeKeyboardClient();
+        myClient.conctTask.delegate = this;
+
         PasswordGestureCollector.resetKeyBoardTrainingGestures();
+        myClient.Start();
     }
 
     public void msgIn(String type, String message) {
