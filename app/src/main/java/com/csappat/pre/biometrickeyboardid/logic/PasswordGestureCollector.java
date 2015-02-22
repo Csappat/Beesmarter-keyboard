@@ -1,5 +1,7 @@
 package com.csappat.pre.biometrickeyboardid.logic;
 
+import android.util.Log;
+
 import com.csappat.pre.biometrickeyboardid.xml.PatternModel;
 import com.csappat.pre.biometrickeyboardid.xml.Type;
 
@@ -32,24 +34,31 @@ public class PasswordGestureCollector {
         boolean result = true;
         if (gestures.size()  != 0 && stat != null) {
             if (!current.getCurrentString().equals(gestures.get(0).getCurrentString())) {
+                Log.d("IsItYou: ", "Not equal pass");
                 return false;
             }
-            if (Math.abs((col.stat.deviationTouchAccuracyX - stat.deviationTouchAccuracyX) / stat.deviationTouchAccuracyX) > 0.3 ) {
+            if (Math.abs((col.stat.deviationTouchAccuracyX - stat.deviationTouchAccuracyX) / stat.deviationTouchAccuracyX) > 0.7 ) {
+                Log.d("IsItYou: ", "Dev touch x");
                 return false;
             }
-            if (Math.abs((col.stat.deviationTouchAccuracyY - stat.deviationTouchAccuracyY) / stat.deviationTouchAccuracyY) > 0.3 ) {
+            if (Math.abs((col.stat.deviationTouchAccuracyY - stat.deviationTouchAccuracyY) / stat.deviationTouchAccuracyY) > 0.7 ) {
+                Log.d("IsItYou: ","dev touch y" );
                 return false;
             }
             if (Math.abs(col.stat.averageTypoCount - col.stat.averageTypoCount) > 1) {
+                Log.d("IsItYou: ", "wrong typo count");
                 return false;
             }
-            if (Math.abs((col.stat.averageSpeed - stat.averageSpeed) / stat.averageSpeed) > 0.3 ) {
+            if (Math.abs((col.stat.averageSpeed - stat.averageSpeed) / stat.averageSpeed) > 2) {
+                Log.d("IsItYou: ", "avg speed");
                 return false;
             }
-            if (Math.abs((col.stat.deviationTimeBetweenReleaseAndPress - stat.deviationTimeBetweenReleaseAndPress) / stat.deviationTimeBetweenReleaseAndPress) > 0.3) {
+            if (Math.abs((col.stat.deviationTimeBetweenReleaseAndPress - stat.deviationTimeBetweenReleaseAndPress) / stat.deviationTimeBetweenReleaseAndPress) > 2) {
+                Log.d("IsItYou: ", "release and press time");
                 return false;
             }
-            if (Math.abs((col.stat.deviationTimeOfButtonPress - stat.deviationTimeOfButtonPress) / stat.deviationTimeOfButtonPress) > 0.3) {
+            if (Math.abs((col.stat.deviationTimeOfButtonPress - stat.deviationTimeOfButtonPress) / stat.deviationTimeOfButtonPress) > 0.7) {
+                Log.d("IsItYou: ", "Press time" );
                 return false;
             }
         } else {
