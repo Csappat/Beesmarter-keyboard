@@ -36,7 +36,6 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent();
-                i.putExtra("ip", ipTxt.toString());
                 i.setClass(getApplicationContext(), PasswordActivity.class);
                 startActivity(i);
             }
@@ -45,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void btnServer(View view) {
         Intent i = new Intent();
+        i.putExtra("ip", ipTxt.toString());
         i.setClass(getApplicationContext(), ServerTest.class);
         startActivity(i);
     }
