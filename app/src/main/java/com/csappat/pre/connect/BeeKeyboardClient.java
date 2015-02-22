@@ -8,6 +8,12 @@ import java.net.Socket;
 
 /**
  * Created by Krisz on 2015.02.22..
+ *
+ * Először végezzük el a getTest kérést, majd setResultba küldjük az eredményt.
+ * Ha a setResult visszatérési értéke nem null, újra getTest, majd ismét setResult.
+ * Amennyiben a setResult null-t dob vissza, úgy a tesztprogram kilépett,
+ * az osztály a további interakciókat blokkolja
+ *
  */
 public class BeeKeyboardClient {
     private static String IP_ADDRESS = "192.168.0.105";
