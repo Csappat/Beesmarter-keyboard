@@ -2,6 +2,7 @@ package com.csappat.pre.biometrickeyboardid;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.TextView;
 
 import com.csappat.pre.biometrickeyboardid.views.SensorKey;
 
@@ -147,6 +148,9 @@ public class PasswordActivity extends ActionBarActivity {
         space.setKey(" ");
         keys.add(space);
 
+        SensorKey.setViewGroupAndEditedView(keys, (TextView)findViewById(R.id.editable) );
     }
+
+
 
 }

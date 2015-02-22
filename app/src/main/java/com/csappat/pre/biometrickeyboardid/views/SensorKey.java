@@ -8,10 +8,15 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.csappat.pre.biometrickeyboardid.R;
+import com.csappat.pre.biometrickeyboardid.logic.KeyPressCollector;
 import com.csappat.pre.biometrickeyboardid.xml.PatternModel;
 import com.csappat.pre.biometrickeyboardid.xml.Type;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.Calendar;
 
@@ -20,6 +25,9 @@ import java.util.Calendar;
  */
 public class SensorKey extends View  {
 
+    KeyPressCollector collector = KeyPressCollector.getDefaultCollector();
+
+
     private String key;
     private Drawable keyBackground;
     private Paint paint;
@@ -27,12 +35,20 @@ public class SensorKey extends View  {
     private boolean active = false;
     private static boolean isUpperCase = false;
 
+    private static List<SensorKey> keys = new ArrayList<SensorKey>();
+    private static TextView editedView;
+
     public String getKey() {
         return key;
     }
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public static void setViewGroupAndEditedView(ArrayList<SensorKey> keys, TextView editedView) {
+        SensorKey.keys = keys;
+        SensorKey.editedView = editedView;
     }
 
     public Drawable getKeyBackground() {
@@ -60,9 +76,11 @@ public class SensorKey extends View  {
     }
 
     public void changeUpperOrLowerCase(){
-        if(isUpperCase) key.toLowerCase();
-        else key.toUpperCase();
-        isUpperCase=!isUpperCase;
+        for (SensorKey k : keys) {
+            if (isUpperCase) k.setKey(k.key.toLowerCase());
+            else k.setKey(k.key.toUpperCase());
+            isUpperCase=!isUpperCase;
+        }
         invalidate();
     }
 
@@ -104,7 +122,6 @@ public class SensorKey extends View  {
     }
 
     //Click
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         Type type;
@@ -148,7 +165,9 @@ public class SensorKey extends View  {
             millisRelease=Calendar.getInstance().getTimeInMillis();
             PatternModel reseaseModel= new PatternModel(type,(int)(millisRelease-millisDown),charCode,
                     (int)((event.getX()/this.getWidth())*100),(int)((event.getY()/this.getHeight()*100)));
+            collector.keyPressed(reseaseModel);
         }
+        editedView.setText(collector.getCurrentString());
         return super.dispatchTouchEvent(event);
     }
 
