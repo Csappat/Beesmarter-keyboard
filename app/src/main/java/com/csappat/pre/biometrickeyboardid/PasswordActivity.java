@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.csappat.pre.biometrickeyboardid.logic.KeyPressCollector;
 import com.csappat.pre.biometrickeyboardid.logic.PasswordGestureCollector;
@@ -21,6 +22,7 @@ public class PasswordActivity extends ActionBarActivity {
 
     boolean isTraining = false;
     private int trainingCount = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,9 +162,29 @@ public class PasswordActivity extends ActionBarActivity {
         SensorKey.setViewGroupAndEditedView(keys, (TextView)findViewById(R.id.editable) );
     }
 
+    private boolean trial = false;
 
     public void startTraining(View v) {
         Button trainingButton = (Button)v;
+        if (trainingCount > 2 && trial == false) {
+            trainingCount = 0;
+            trial = true;
+            trainingButton.setText("Start trial");
+            return;
+        }
+        if (trial == true)  {
+            KeyPressCollector colForTrial = new KeyPressCollector(false);
+            for (PatternModel p : KeyPressCollector.getDefaultCollector().getModels()) {
+                colForTrial.keyPressed(p);
+            }
+            Log.d("IsItYou: ",  "" + PasswordGestureCollector.getGesturesFromKeyboardTraining().isItYou(colForTrial));
+            Toast.makeText(this, "Is it you? "
+                    + PasswordGestureCollector.getGesturesFromKeyboardTraining().isItYou(colForTrial), Toast.LENGTH_LONG).show();
+            trainingButton.setText("Start training");
+            trial = false;
+
+            return;
+        }
         if (!isTraining) {
             isTraining = true;
             trainingButton.setText("Next pattern");
@@ -178,13 +200,17 @@ public class PasswordActivity extends ActionBarActivity {
             KeyPressCollector.resetDefaultCollector();
             PasswordGestureCollector.addGestureFromKeyboard(col);
             trainingCount++;
+            if (trainingCount == 2) {
+                trainingButton.setText("Finish training");
+            }
             if (trainingCount > 2) {
-                trainingCount = 0;
                 isTraining = false;
                 Log.d("PasswordActivity", "Gestures " + PasswordGestureCollector.getGesturesFromKeyboardTraining().toString());
                 PasswordGestureCollector.getGesturesFromKeyboardTraining().finishTraining();
-                trainingButton.setText("Start training");
+                trainingButton.setText("Start trial");
+                return;
             }
+
         }
     }
 
