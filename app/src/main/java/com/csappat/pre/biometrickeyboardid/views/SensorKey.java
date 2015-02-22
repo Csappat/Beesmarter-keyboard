@@ -39,6 +39,9 @@ public class SensorKey extends View  {
     private static List<SensorKey> keys = new ArrayList<SensorKey>();
     private static TextView editedView;
 
+    private static long lastKeyUp  = 0;
+    long millisDown=0;
+
     public String getKey() {
         return key;
     }
@@ -81,7 +84,7 @@ public class SensorKey extends View  {
         for (SensorKey k : keys) {
             if (isUpperCase) k.setKey(k.key.toLowerCase());
             else k.setKey(k.key.toUpperCase());
-            k.invalidate();
+
 
             k.invalidate();
         }
@@ -131,7 +134,6 @@ public class SensorKey extends View  {
     public boolean dispatchTouchEvent(MotionEvent event) {
         Type type;
         String charCode=key;
-        long millisDown=0;
         long millisRelease=0;
 
 
@@ -146,6 +148,9 @@ public class SensorKey extends View  {
             }
             case "⇧" : {
                 charCode= "SHIFT";
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    changeUpperOrLowerCase();
+                }
                 break;
             }
             case " " : {
@@ -158,20 +163,31 @@ public class SensorKey extends View  {
             if(listener != null) listener.onClick(this);
             changeState();
             type= Type.KeyDown;
-            millisDown=  Calendar.getInstance().getTimeInMillis();
+            millisDown =  Calendar.getInstance().getTimeInMillis();
+            long millisBetweenTwoIteraction = 0;
+            if (lastKeyUp != 0) {
+                millisBetweenTwoIteraction = Calendar.getInstance().getTimeInMillis() - lastKeyUp;
+            }
 
-
-
+            PatternModel keyDownModel= new PatternModel(type,(int)(millisBetweenTwoIteraction),charCode,
+                    (int)((event.getX()/this.getWidth())*100),(int)((event.getY()/this.getHeight()*100)));
+            collector.keyPressed(keyDownModel);
+            Log.d("SesorKey", "Gesture: " + keyDownModel.toString());
         }
         if(event.getAction() == MotionEvent.ACTION_UP) {
             if(listener != null) listener.onClick(this);
-            if ( key.equals("⇧")) changeUpperOrLowerCase();
+            lastKeyUp = Calendar.getInstance().getTimeInMillis();
             changeState();
             type= Type.KeyRelease;
             millisRelease=Calendar.getInstance().getTimeInMillis();
-            PatternModel reseaseModel= new PatternModel(type,(int)(millisRelease-millisDown),charCode,
+            int millisOnKey = 0;
+            if (millisDown != 0) {
+                millisOnKey = (int)(millisRelease-millisDown);
+            }
+            PatternModel reseaseModel= new PatternModel(type,millisOnKey, charCode,
                     (int)((event.getX()/this.getWidth())*100),(int)((event.getY()/this.getHeight()*100)));
             collector.keyPressed(reseaseModel);
+            Log.d("SesorKey", "Gesture: " + reseaseModel.toString());
         }
         editedView.setText(collector.getCurrentString());
         return super.dispatchTouchEvent(event);
