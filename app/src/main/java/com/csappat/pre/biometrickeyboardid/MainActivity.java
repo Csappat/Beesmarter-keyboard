@@ -43,9 +43,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void btnServer(View view) {
-        Intent i = new Intent();
+        Intent i = new Intent(getApplicationContext(), ServerTest.class);
         i.putExtra("ip", ipTxt.toString());
-        i.setClass(getApplicationContext(), ServerTest.class);
         startActivity(i);
     }
 
