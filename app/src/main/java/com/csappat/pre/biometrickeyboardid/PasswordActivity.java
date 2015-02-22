@@ -149,8 +149,9 @@ public class PasswordActivity extends ActionBarActivity {
         keys.add(space);
 
         SensorKey.setViewGroupAndEditedView(keys, (TextView)findViewById(R.id.editable) );
-    }
 
+
+    }
 
 
 }

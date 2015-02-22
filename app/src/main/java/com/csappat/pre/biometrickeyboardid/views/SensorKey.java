@@ -81,10 +81,11 @@ public class SensorKey extends View  {
         for (SensorKey k : keys) {
             if (isUpperCase) k.setKey(k.key.toLowerCase());
             else k.setKey(k.key.toUpperCase());
-            isUpperCase=!isUpperCase;
+            k.invalidate();
 
             k.invalidate();
         }
+        isUpperCase=!isUpperCase;
         invalidate();
     }
 
@@ -145,7 +146,6 @@ public class SensorKey extends View  {
             }
             case "⇧" : {
                 charCode= "SHIFT";
-                changeUpperOrLowerCase();
                 break;
             }
             case " " : {
@@ -161,9 +161,11 @@ public class SensorKey extends View  {
             millisDown=  Calendar.getInstance().getTimeInMillis();
 
 
+
         }
         if(event.getAction() == MotionEvent.ACTION_UP) {
             if(listener != null) listener.onClick(this);
+            if ( key.equals("⇧")) changeUpperOrLowerCase();
             changeState();
             type= Type.KeyRelease;
             millisRelease=Calendar.getInstance().getTimeInMillis();
