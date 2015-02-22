@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -76,10 +77,13 @@ public class SensorKey extends View  {
     }
 
     public void changeUpperOrLowerCase(){
+        Log.d("SensorKey", "change Upper and Lower");
         for (SensorKey k : keys) {
             if (isUpperCase) k.setKey(k.key.toLowerCase());
             else k.setKey(k.key.toUpperCase());
             isUpperCase=!isUpperCase;
+
+            k.invalidate();
         }
         invalidate();
     }

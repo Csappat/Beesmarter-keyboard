@@ -41,7 +41,9 @@ public class KeyPressCollector {
             }
             switch(m.charCode) {
                 case XMLConstants.BACKSPACE:
-                    builder.deleteCharAt(builder.length() - 1);
+                    if (builder.length() > 0) {
+                        builder.deleteCharAt(builder.length() - 1);
+                    }
                     continue loop;
                 case XMLConstants.ENTER:
                     builder.append("\n");
